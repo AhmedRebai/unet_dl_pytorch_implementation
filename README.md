@@ -52,13 +52,11 @@ input_image = torch.rand((1, 1, 572, 572))
 segmentation_map = model(input_image)
 
 Results
+ToDo
 
-You can showcase some example results or performance metrics achieved by your model on your dataset. Including visualizations of original images, ground truth masks, and the model's predicted masks can provide valuable insights into the quality of your segmentation model.
 Contributing
 
 Contributions to this project are welcome! If you find any issues or would like to suggest improvements, please open an issue or a pull request. You can also contribute by adding more features, improving documentation, or optimizing the code.
 License
 
 This project is licensed under the MIT License.
-
-Remember to replace placeholders with actual information relevant to your project. This README.md template provides a structured and informative outline for your GitHub repository, helping others understand your U-Net implementation and encouraging collaboration.
