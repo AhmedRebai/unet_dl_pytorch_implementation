@@ -57,6 +57,89 @@ ToDo
 Contributing
 
 Contributions to this project are welcome! If you find any issues or would like to suggest improvements, please open an issue or a pull request. You can also contribute by adding more features, improving documentation, or optimizing the code.
+
+
+# Transforming the code into a Flask API
+
+Install Dependencies:
+Make sure you have Flask and PyTorch installed. You can install them using:
+
+bash
+
+pip install flask torch torchvision
+
+Create a Flask App:
+Create a new directory for your Flask app and create a file named app.py inside it.
+
+Import Libraries:
+In your app.py, import the necessary libraries:
+
+python
+
+from flask import Flask, request, jsonify
+import torch
+import torch.nn as nn
+
+Define the U-Net Model Class:
+Define the UNet class, as you've done before.
+
+Instantiate Flask App:
+Create the Flask app instance:
+
+python
+
+app = Flask(__name__)
+
+Load the Model:
+Load the trained U-Net model inside the Flask app. Make sure to replace 'path_to_your_model.pth' with the actual path to your saved model checkpoint.
+
+python
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = UNet()
+model.load_state_dict(torch.load('path_to_your_model.pth', map_location=device))
+model.eval()
+
+Define API Endpoint:
+Define a route to accept POST requests with images for segmentation. The endpoint will run the image through the model and return the segmentation results.
+
+python
+
+@app.route('/segment', methods=['POST'])
+def segment_image():
+    try:
+        image = request.files['image'].read()
+        image = Image.open(io.BytesIO(image)).convert('L')  # Convert to grayscale
+        image = transforms.Resize((572, 572))(image)
+        image = transforms.ToTensor()(image)
+        image = image.unsqueeze(0)  # Add batch dimension
+
+        with torch.no_grad():
+            output = model(image)
+
+        # Process the output, create segmentation map or return as needed
+        # ...
+
+        return jsonify({'segmentation_map': segmentation_map})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+Run the Flask App:
+Add this line at the end of your app.py to run the Flask app:
+
+python
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+Run the App:
+In your terminal, navigate to the directory where app.py is located and run the app:
+
+bash
+
+    python app.py
+
 License
 
 This project is licensed under the MIT License.
+
